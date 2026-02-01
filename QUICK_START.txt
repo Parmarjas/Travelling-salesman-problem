@@ -1,0 +1,139 @@
+╔══════════════════════════════════════════════════════════════╗
+║           TSP VOYAGER - QUICK START GUIDE                    ║
+╚══════════════════════════════════════════════════════════════╝
+
+🚀 GETTING STARTED (3 Steps)
+════════════════════════════════════════════════════════════════
+
+Step 1: Install Dependencies
+────────────────────────────
+Open terminal/command prompt and run:
+    pip install Flask
+
+Step 2: Start the Server
+────────────────────────
+In the project folder, run:
+    python app.py
+
+Step 3: Open Browser
+────────────────────
+Navigate to:
+    http://localhost:5000
+
+
+📋 HOW TO USE
+════════════════════════════════════════════════════════════════
+
+1. ADD CITIES
+   → Click "Add Cities" mode button (if not already active)
+   → Click anywhere on the canvas to place cities
+   → Each city gets a number automatically
+
+2. NAVIGATE CANVAS
+   → Zoom: Use mouse wheel
+   → Pan: Click "Pan View" mode and drag
+   → Reset: Click "Reset View" button
+
+3. SOLVE TSP
+   → Select algorithm (Nearest Neighbor recommended)
+   → Click "Solve TSP" button
+   → Watch the animated solution!
+
+4. VIEW RESULTS
+   → Total distance shown in top stats bar
+   → Route highlighted in magenta with arrows
+
+5. START OVER
+   → Click "Clear All" to remove everything
+
+
+🎯 ALGORITHM GUIDE
+════════════════════════════════════════════════════════════════
+
+Nearest Neighbor (FAST)
+    • Best for: Quick results, any number of cities
+    • Speed: Very fast
+    • Accuracy: Good approximation (not always optimal)
+
+Held-Karp (EXACT)
+    • Best for: Exact solution, ≤12 cities
+    • Speed: Moderate (slower for 10+ cities)
+    • Accuracy: Guaranteed optimal solution
+
+Brute Force (EXACT)
+    • Best for: Exact solution, ≤10 cities
+    • Speed: Slow (very slow for 10 cities)
+    • Accuracy: Guaranteed optimal solution
+
+
+⌨️ KEYBOARD SHORTCUTS
+════════════════════════════════════════════════════════════════
+
+Mouse Wheel      → Zoom in/out
+Click & Drag     → Pan (in Pan View mode)
+Click            → Place city (in Add Cities mode)
+
+
+💡 TIPS & TRICKS
+════════════════════════════════════════════════════════════════
+
+• Start with 5-8 cities to see algorithms in action
+• Use Nearest Neighbor for 15+ cities
+• Zoom in for precise city placement
+• Grid lines help estimate distances
+• Watch the animation - it shows route construction
+• Stats update in real-time as you add cities
+
+
+⚠️ TROUBLESHOOTING
+════════════════════════════════════════════════════════════════
+
+Problem: "Address already in use"
+Solution: Another program is using port 5000
+          Close other applications or edit app.py
+          Change: app.run(debug=True, port=5001)
+
+Problem: Canvas not responding
+Solution: Refresh browser (F5) or try different browser
+
+Problem: No route displayed
+Solution: Ensure you have at least 2 cities placed
+          Check browser console (F12) for errors
+
+
+🎨 FEATURES
+════════════════════════════════════════════════════════════════
+
+✓ Interactive canvas with smooth zoom/pan
+✓ Dynamic grid that adapts to zoom level
+✓ Real-time coordinate display
+✓ Multiple TSP algorithms
+✓ Animated route visualization
+✓ Distance calculation
+✓ Professional sci-fi UI design
+✓ Responsive layout
+
+
+📊 TECHNICAL SPECS
+════════════════════════════════════════════════════════════════
+
+Backend:     Flask (Python)
+Frontend:    HTML5 Canvas, JavaScript, CSS3
+Algorithms:  Nearest Neighbor, Held-Karp, Brute Force
+Zoom Range:  10% - 1000%
+Grid:        Auto-adjusting Cartesian coordinates
+
+
+🎓 PERFECT FOR
+════════════════════════════════════════════════════════════════
+
+• Algorithm visualization
+• Computer science coursework
+• Understanding NP-hard problems
+• Portfolio projects
+• Educational demonstrations
+
+
+════════════════════════════════════════════════════════════════
+Need help? Check README.md for detailed documentation
+════════════════════════════════════════════════════════════════

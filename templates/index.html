@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TSP Voyager – Interactive Route Optimizer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">TSP VOYAGER</h1>
+                <p class="subtitle">Interactive Traveling Salesman Problem Visualizer</p>
+            </div>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-label">Cities</span>
+                    <span class="stat-value" id="cityCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Distance</span>
+                    <span class="stat-value" id="totalDistance">—</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Algorithm</span>
+                    <span class="stat-value algorithm-badge" id="currentAlgorithm">NONE</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Control Panel -->
+            <aside class="control-panel">
+                <div class="panel-section">
+                    <h3 class="panel-title">INTERACTION MODE</h3>
+                    <div class="mode-selector">
+                        <button class="mode-btn active" id="cityModeBtn" data-mode="city">
+                            <svg width="20" height="20" viewBox="0 0 20 20">
+                                <circle cx="10" cy="10" r="8" fill="currentColor"/>
+                            </svg>
+                            <span>Add Cities</span>
+                        </button>
+                        <button class="mode-btn" id="panModeBtn" data-mode="pan">
+                            <svg width="20" height="20" viewBox="0 0 20 20">
+                                <path d="M10 2L10 18M2 10L18 10" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            <span>Pan View</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h3 class="panel-title">ALGORITHM</h3>
+                    <select id="algorithmSelect" class="algorithm-select">
+                        <option value="nearest_neighbor">Nearest Neighbor (Fast)</option>
+                        <option value="held_karp">Held-Karp (Exact, ≤12 cities)</option>
+                        <option value="brute_force">Brute Force (Exact, ≤10 cities)</option>
+                    </select>
+                </div>
+
+                <div class="panel-section">
+                    <h3 class="panel-title">ZOOM CONTROLS</h3>
+                    <div class="zoom-controls">
+                        <button class="control-btn" id="zoomInBtn">
+                            <svg width="20" height="20" viewBox="0 0 20 20">
+                                <path d="M10 4L10 16M4 10L16 10" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            Zoom In
+                        </button>
+                        <button class="control-btn" id="zoomOutBtn">
+                            <svg width="20" height="20" viewBox="0 0 20 20">
+                                <path d="M4 10L16 10" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            Zoom Out
+                        </button>
+                        <button class="control-btn" id="resetViewBtn">
+                            <svg width="20" height="20" viewBox="0 0 20 20">
+                                <path d="M10 2C5.6 2 2 5.6 2 10C2 14.4 5.6 18 10 18C14.4 18 18 14.4 18 10" stroke="currentColor" stroke-width="2" fill="none"/>
+                                <path d="M18 10L15 7M18 10L15 13" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            Reset View
+                        </button>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h3 class="panel-title">ACTIONS</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn primary" id="solveBtn">
+                            <svg width="20" height="20" viewBox="0 0 20 20">
+                                <path d="M2 10L8 16L18 4" stroke="currentColor" stroke-width="2" fill="none"/>
+                            </svg>
+                            <span>Solve TSP</span>
+                        </button>
+                        <button class="action-btn secondary" id="clearBtn">
+                            <svg width="20" height="20" viewBox="0 0 20 20">
+                                <path d="M4 4L16 16M16 4L4 16" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            <span>Clear All</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="panel-section info-section">
+                    <h3 class="panel-title">INSTRUCTIONS</h3>
+                    <ul class="instructions">
+                        <li>Click "Add Cities" mode and click on canvas to place cities</li>
+                        <li>Use mouse wheel to zoom in/out</li>
+                        <li>Switch to "Pan View" to drag and move the canvas</li>
+                        <li>Select algorithm and click "Solve TSP"</li>
+                        <li>Click "Clear All" to start over</li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- Canvas Area -->
+            <div class="canvas-container">
+                <div class="canvas-wrapper" id="canvasWrapper">
+                    <canvas id="tspCanvas"></canvas>
+                    <div class="canvas-overlay" id="loadingOverlay">
+                        <div class="spinner"></div>
+                        <p>Computing optimal route...</p>
+                    </div>
+                </div>
+                <div class="canvas-info">
+                    <span id="cursorCoords">X: 0, Y: 0</span>
+                    <span id="zoomLevel">Zoom: 100%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,286 @@
+TSP VOYAGER - DEMO SCENARIOS & TEST CASES
+═══════════════════════════════════════════════════════════════
+
+Use these scenarios to demonstrate your project or test functionality.
+
+
+SCENARIO 1: Basic Triangle (Beginner)
+═══════════════════════════════════════════════════════════════
+
+Goal: Demonstrate basic functionality
+Cities: 3
+
+Steps:
+1. Start the application
+2. Click three times to create a triangle
+   • Point 1: Click top-center area
+   • Point 2: Click bottom-left area
+   • Point 3: Click bottom-right area
+3. Select "Nearest Neighbor" algorithm
+4. Click "Solve TSP"
+5. Observe the route connecting all three cities
+
+Expected Result:
+• Route forms a triangle
+• Distance displayed in stats
+• Animation shows route construction
+
+
+SCENARIO 2: Perfect Square (Intermediate)
+═══════════════════════════════════════════════════════════════
+
+Goal: Compare algorithms on simple geometry
+Cities: 4
+
+Steps:
+1. Clear previous cities
+2. Place 4 cities forming a square:
+   • Top-left
+   • Top-right
+   • Bottom-right
+   • Bottom-left
+3. Solve with "Nearest Neighbor"
+4. Note the distance
+5. Clear and recreate the same square
+6. Solve with "Held-Karp"
+7. Compare distances
+
+Expected Result:
+• Both should find same optimal route
+• Distance should be approximately 4 × side length
+
+
+SCENARIO 3: Pentagon Challenge (Advanced)
+═══════════════════════════════════════════════════════════════
+
+Goal: Test exact vs heuristic algorithms
+Cities: 5
+
+Steps:
+1. Place 5 cities in a rough pentagon shape
+2. First run: Use "Nearest Neighbor"
+   • Record distance
+3. Second run: Use "Held-Karp"
+   • Record distance
+4. Third run: Use "Brute Force"
+   • Record distance
+
+Expected Result:
+• Held-Karp and Brute Force should give identical results
+• Nearest Neighbor might give slightly longer route
+• Demonstrates difference between exact and heuristic
+
+
+SCENARIO 4: Zoom & Precision (Technical)
+═══════════════════════════════════════════════════════════════
+
+Goal: Test zoom and coordinate mapping
+Cities: 3-5
+
+Steps:
+1. Place 2-3 cities far apart
+2. Zoom in significantly (400-600%)
+3. Place additional cities in the zoomed area
+4. Pan to see all cities
+5. Zoom out to default view
+6. Solve TSP
+
+Expected Result:
+• All cities maintain correct positions
+• Grid adapts smoothly to zoom level
+• Coordinates remain accurate
+• Route connects all cities properly
+
+
+SCENARIO 5: Large Dataset (Performance)
+═══════════════════════════════════════════════════════════════
+
+Goal: Test performance with many cities
+Cities: 15-20
+
+Steps:
+1. Rapidly click to place 15-20 cities
+2. Select "Nearest Neighbor" (fastest)
+3. Click "Solve TSP"
+4. Time how long it takes
+
+Expected Result:
+• Solution found in < 1 second
+• Route displayed correctly
+• Application remains responsive
+
+
+SCENARIO 6: Edge Cases (Testing)
+═══════════════════════════════════════════════════════════════
+
+Test A: Single City
+────────────────────
+1. Place only 1 city
+2. Try to solve
+Expected: Error message or graceful handling
+
+Test B: Two Cities
+────────────────────
+1. Place exactly 2 cities
+2. Solve with any algorithm
+Expected: Simple line between them
+
+Test C: Overlapping Cities
+────────────────────────────
+1. Place 3-4 cities very close together
+2. Add 2-3 cities far away
+3. Solve TSP
+Expected: Route correctly handles clustered cities
+
+Test D: Maximum Zoom
+────────────────────
+1. Zoom in to 1000%
+2. Try to place cities
+3. Zoom out and solve
+Expected: Cities placed at correct coordinates
+
+Test E: Algorithm Limits
+────────────────────────
+1. Place 13 cities
+2. Try "Held-Karp"
+Expected: Falls back to Nearest Neighbor
+
+1. Place 11 cities
+2. Try "Brute Force"
+Expected: Falls back to Nearest Neighbor
+
+
+SCENARIO 7: Visual Effects Showcase (Presentation)
+═══════════════════════════════════════════════════════════════
+
+Goal: Highlight the UI/UX design
+Cities: 6-8
+
+Steps:
+1. Place 6-8 cities in an interesting pattern
+   (e.g., star, hexagon, or random cluster)
+2. Zoom in and out to show grid adaptation
+3. Switch between "Add Cities" and "Pan View" modes
+4. Solve with animation visible
+5. Point out:
+   • Glowing city effects
+   • Animated route drawing
+   • Direction arrows
+   • Real-time stats
+   • Responsive controls
+
+Expected Result:
+• Impressive visual demonstration
+• Smooth animations
+• Professional appearance
+
+
+SCENARIO 8: Comparative Analysis (Academic)
+═══════════════════════════════════════════════════════════════
+
+Goal: Compare all three algorithms
+Cities: 8
+
+Steps:
+1. Create a specific pattern of 8 cities
+2. Document their coordinates
+3. Solve with each algorithm:
+   a. Nearest Neighbor → Record time & distance
+   b. Held-Karp       → Record time & distance
+   c. Brute Force     → Record time & distance
+4. Create a comparison table
+
+Expected Results:
+• Held-Karp and Brute Force: Same distance (optimal)
+• Nearest Neighbor: Possibly suboptimal
+• Time: NN < Held-Karp < Brute Force
+
+
+SAMPLE COORDINATES FOR REPRODUCIBLE TESTS
+═══════════════════════════════════════════════════════════════
+
+Square Pattern (4 cities):
+• City 0: (50, 50)
+• City 1: (150, 50)
+• City 2: (150, 150)
+• City 3: (50, 150)
+Optimal distance: ~400 units
+
+Pentagon Pattern (5 cities):
+• City 0: (100, 50)
+• City 1: (150, 100)
+• City 2: (130, 160)
+• City 3: (70, 160)
+• City 4: (50, 100)
+
+Random Test Set (6 cities):
+• City 0: (30, 80)
+• City 1: (120, 40)
+• City 2: (180, 90)
+• City 3: (160, 160)
+• City 4: (80, 170)
+• City 5: (40, 120)
+
+
+PRESENTATION CHECKLIST
+═══════════════════════════════════════════════════════════════
+
+Before presenting:
+□ Test all three algorithms
+□ Verify zoom in/out works
+□ Verify pan mode works
+□ Test clear button
+□ Check stats update correctly
+□ Ensure grid displays properly
+□ Verify route animation plays
+□ Test on different browsers
+□ Prepare explanation of each algorithm
+□ Have backup demo ready
+
+During presentation:
+□ Start with simple example (3-4 cities)
+□ Explain the interface
+□ Demonstrate zoom/pan
+□ Show algorithm comparison
+□ Highlight visual design
+□ Discuss algorithm complexity
+□ Show edge cases handling
+□ Take questions
+
+
+COMMON DEMO MISTAKES TO AVOID
+═══════════════════════════════════════════════════════════════
+
+❌ Placing too many cities first time (start simple!)
+❌ Not explaining the coordinate system
+❌ Forgetting to show zoom/pan features
+❌ Skipping algorithm comparison
+❌ Not highlighting the visual design
+❌ Rushing through the animation
+❌ Not testing beforehand
+
+
+ADVANCED DEMONSTRATIONS
+═══════════════════════════════════════════════════════════════
+
+1. Grid System Explanation
+   • Show how grid spacing adapts to zoom
+   • Demonstrate coordinate accuracy
+   • Explain origin placement
+
+2. Algorithm Complexity
+   • Compare solving times for 5, 8, 10 cities
+   • Explain why limits exist (12 for Held-Karp, 10 for Brute Force)
+   • Show exponential growth of computation
+
+3. Heuristic vs Exact
+   • Create scenario where Nearest Neighbor is suboptimal
+   • Show how exact algorithms find better solution
+   • Discuss trade-offs (speed vs accuracy)
+
+
+═══════════════════════════════════════════════════════════════
+Good luck with your demonstration!
+For technical details, see PROJECT_STRUCTURE.txt
+For setup help, see README.md
+═══════════════════════════════════════════════════════════════

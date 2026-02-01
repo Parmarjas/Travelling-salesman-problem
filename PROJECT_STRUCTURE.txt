@@ -1,0 +1,175 @@
+TSP VOYAGER - PROJECT STRUCTURE
+═══════════════════════════════════════════════════════════════
+
+tsp-voyager/
+│
+├── 📄 app.py                          # Flask backend server
+│   ├── TSP solving algorithms
+│   ├── Distance calculations
+│   ├── Route optimization
+│   └── REST API endpoints
+│
+├── 📄 requirements.txt                # Python dependencies
+│   └── Flask==3.0.0
+│
+├── 📁 templates/
+│   └── 📄 index.html                  # Main HTML page
+│       ├── Header with stats
+│       ├── Control panel sidebar
+│       ├── Canvas container
+│       └── UI components
+│
+├── 📁 static/
+│   ├── 📄 style.css                   # Styling & animations
+│   │   ├── Cyberpunk theme
+│   │   ├── Responsive layout
+│   │   ├── Button styles
+│   │   └── Canvas styling
+│   │
+│   └── 📄 script.js                   # Frontend logic
+│       ├── Canvas rendering
+│       ├── Zoom & pan controls
+│       ├── City management
+│       ├── Coordinate conversion
+│       ├── Grid drawing
+│       └── Route animation
+│
+├── 📄 README.md                       # Full documentation
+│   ├── Installation guide
+│   ├── Usage instructions
+│   ├── Technical details
+│   └── Troubleshooting
+│
+└── 📄 QUICK_START.txt                # Quick reference guide
+
+
+KEY FILES EXPLAINED
+═══════════════════════════════════════════════════════════════
+
+app.py (Backend)
+────────────────
+• Flask web server
+• Implements 3 TSP algorithms:
+  - Nearest Neighbor (greedy heuristic)
+  - Held-Karp (dynamic programming)
+  - Brute Force (exhaustive search)
+• Handles /solve endpoint for TSP computation
+• Returns optimal routes and distances
+
+index.html (Structure)
+──────────────────────
+• Complete page layout
+• Control panel with buttons
+• Canvas element for visualization
+• Stats display (cities, distance, algorithm)
+• Mode selectors and zoom controls
+
+style.css (Appearance)
+──────────────────────
+• Sci-fi/cyberpunk aesthetic
+• Custom fonts (Orbitron, Bebas Neue, JetBrains Mono)
+• Neon cyan and magenta color scheme
+• Smooth animations and transitions
+• Responsive design for all screen sizes
+
+script.js (Interactivity)
+─────────────────────────
+• Canvas rendering engine
+• Mouse event handlers (click, drag, wheel)
+• Coordinate system transformations
+• Dynamic grid and axis drawing
+• City placement and management
+• Route animation system
+• Real-time stats updates
+
+
+DATA FLOW
+═══════════════════════════════════════════════════════════════
+
+User Action          → Frontend          → Backend
+───────────────────────────────────────────────────────
+1. Click canvas      → Add city          → —
+2. Select algorithm  → Update UI         → —
+3. Click "Solve TSP" → Show loading      → Compute route
+4. Route found       ← Update canvas     ← Return solution
+5. Display result    ← Animate route     ← Distance data
+
+
+COORDINATE SYSTEMS
+═══════════════════════════════════════════════════════════════
+
+Canvas Coordinates (Pixels)
+    Origin: Top-left corner
+    X: Left to right (0 to canvasWidth)
+    Y: Top to bottom (0 to canvasHeight)
+
+Graph Coordinates (Units)
+    Origin: Center of canvas
+    X: Left (-) to right (+)
+    Y: Top (-) to bottom (+)
+
+Conversion Functions:
+    canvasToGraph(x, y) → graph coordinates
+    graphToCanvas(x, y) → canvas coordinates
+
+
+RENDERING PIPELINE
+═══════════════════════════════════════════════════════════════
+
+1. Clear canvas
+2. Draw grid lines (dynamically spaced)
+3. Draw X and Y axes
+4. Draw axis labels (with zoom adjustment)
+5. Draw route (if solution exists)
+   → Line segments with glow effects
+   → Direction arrows at midpoints
+6. Draw cities
+   → Glow effect
+   → Circle with border
+   → Numbered label
+
+
+ALGORITHM SELECTION LOGIC
+═══════════════════════════════════════════════════════════════
+
+Nearest Neighbor
+    • Always available
+    • O(n²) complexity
+    • Greedy approach: pick nearest unvisited city
+
+Held-Karp
+    • Exact for n ≤ 12 cities
+    • Falls back to Nearest Neighbor for n > 12
+    • O(n² × 2ⁿ) complexity
+    • Dynamic programming approach
+
+Brute Force
+    • Exact for n ≤ 10 cities
+    • Falls back to Nearest Neighbor for n > 10
+    • O(n!) complexity
+    • Tests all possible permutations
+
+
+ZOOM & PAN MECHANICS
+═══════════════════════════════════════════════════════════════
+
+Zoom:
+    • Range: 10% - 1000%
+    • Mouse wheel zooms toward cursor position
+    • Preserves point under cursor during zoom
+
+Pan:
+    • Drag canvas in "Pan View" mode
+    • Updates offsetX and offsetY
+    • Maintains zoom level
+
+Grid Adaptation:
+    • Grid spacing doubles when too dense
+    • Grid spacing halves when too sparse
+    • Keeps ~30-120 pixels between lines
+
+
+═══════════════════════════════════════════════════════════════
+For detailed setup instructions, see README.md
+For quick start, see QUICK_START.txt
+═══════════════════════════════════════════════════════════════

@@ -45,14 +45,15 @@ function initializeCanvas() {
     
     // Center the view
     offsetX = canvasWidth / 2;
-    offsetY = canvasHeight / 2;
+    offsetY = (canvasHeight / 2) - 13; // half footer height
+
 }
 
 function setupEventListeners() {
     // Mode switching
-    document.querySelectorAll('.mode-btn').forEach(btn => {
+    document.querySelectorAll('.mode-btn-compact').forEach(btn => {
         btn.addEventListener('click', (e) => {
-            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.mode-btn-compact').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             mode = btn.dataset.mode;
             updateCanvasCursor();
@@ -88,7 +89,7 @@ function setupEventListeners() {
     // Window resize
     window.addEventListener('resize', () => {
         initializeCanvas();
-        drawCanvas();
+        resetView();
     });
 }
 
@@ -223,10 +224,49 @@ function updateStats() {
     if (route.length > 0) {
         const distance = calculateRouteDistance();
         document.getElementById('totalDistance').textContent = distance.toFixed(2);
+        
+        // Update exploration flow
+        updateExplorationFlow();
     } else {
         document.getElementById('totalDistance').textContent = '—';
+        
+        // Clear exploration flow
+        const explorationContent = document.getElementById('explorationContent');
+        if (explorationContent) {
+            explorationContent.innerHTML = '<small class="text-muted">No route yet</small>';
+        }
     }
 }
+
+function updateExplorationFlow() {
+    const explorationContent = document.getElementById('explorationContent');
+    if (!explorationContent || route.length === 0) return;
+
+    let html = '';
+
+    for (let i = 0; i < route.length; i++) {
+        const fromIndex = route[i];
+        const toIndex = route[(i + 1) % route.length];
+
+        const from = cities[fromIndex];
+        const to = cities[toIndex];
+
+        const dist = Math.hypot(to.x - from.x, to.y - from.y).toFixed(2);
+
+        html += `
+            <div class="exploration-step">
+                <span class="city-step">C${fromIndex}</span>
+                <span class="city-arrow">→</span>
+                <span class="distance-badge">${dist}</span>
+                <span class="city-arrow">→</span>
+                <span class="city-step">C${toIndex}</span>
+            </div>
+        `;
+    }
+
+    explorationContent.innerHTML = html;
+}
+
 
 function calculateRouteDistance() {
     if (route.length === 0) return 0;
@@ -250,7 +290,8 @@ async function solveTSP() {
     const algorithm = document.getElementById('algorithmSelect').value;
     const overlay = document.getElementById('loadingOverlay');
     
-    overlay.classList.add('active');
+    overlay.classList.remove('d-none');
+    overlay.classList.add('d-flex');
     
     try {
         const response = await fetch('/solve', {
@@ -280,15 +321,28 @@ async function solveTSP() {
         document.getElementById('currentAlgorithm').textContent = algorithmNames[algorithm];
         
         updateStats();
-        animateRoute();
+        animateExploration();
         
     } catch (error) {
         console.error('Error solving TSP:', error);
         alert('Error solving TSP. Please try again.');
     } finally {
-        overlay.classList.remove('active');
+        overlay.classList.add('d-none');
+        overlay.classList.remove('d-flex');
     }
 }
+
+async function animateExploration() {
+    routeProgress = 0;
+
+    for (let i = 1; i <= route.length; i++) {
+        routeProgress = i / route.length;
+        drawCanvas(routeProgress);
+        updateExplorationFlow();
+        await new Promise(r => setTimeout(r, 400));
+    }
+}
+
 
 function animateRoute() {
     let progress = 0;
@@ -489,6 +543,26 @@ function drawRoute(progress = 1) {
         ctx.lineTo(end.x, end.y);
         ctx.stroke();
         ctx.shadowBlur = 0;
+
+        /* ================================
+        DISTANCE LABEL (PUT HERE)
+        ================================ */
+        const midX = (start.x + end.x) / 2;
+        const midY = (start.y + end.y) / 2;
+
+        const dist = Math.hypot(
+            next.x - current.x,
+            next.y - current.y
+        ).toFixed(1);
+
+        ctx.save();
+        ctx.fillStyle = '#ffcc00';
+        ctx.font = `${10 / zoom}px JetBrains Mono`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(dist, midX, midY - (8 / zoom));
+        ctx.restore();
+
     }
     
     // Draw partial segment if animating

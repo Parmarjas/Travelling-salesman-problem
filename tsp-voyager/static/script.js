@@ -489,27 +489,35 @@ function drawCities() {
             return;
         }
         
+        // Scale city visuals with zoom for readability
+        const scaleFactor = Math.max(1, zoom);
+
+        const glowRadius = Math.round(15 * scaleFactor);
+        const cityRadius = Math.round(6 * scaleFactor);
+        const borderWidth = Math.max(1, Math.round(2 * scaleFactor));
+        const fontSize = Math.min(28, Math.round(12 * scaleFactor));
+
         // Draw city glow
-        const gradient = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, 15);
+        const gradient = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, glowRadius);
         gradient.addColorStop(0, 'rgba(0, 255, 204, 0.6)');
         gradient.addColorStop(1, 'rgba(0, 255, 204, 0)');
         ctx.fillStyle = gradient;
-        ctx.fillRect(pos.x - 15, pos.y - 15, 30, 30);
-        
+        ctx.fillRect(pos.x - glowRadius, pos.y - glowRadius, glowRadius * 2, glowRadius * 2);
+
         // Draw city circle
         ctx.fillStyle = '#00ffcc';
         ctx.beginPath();
-        ctx.arc(pos.x, pos.y, 6, 0, Math.PI * 2);
+        ctx.arc(pos.x, pos.y, cityRadius, 0, Math.PI * 2);
         ctx.fill();
-        
+
         // Draw city border
         ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 2;
+        ctx.lineWidth = borderWidth;
         ctx.stroke();
-        
-        // Draw city label
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 12px JetBrains Mono';
+
+        // Draw city label (index)
+        ctx.fillStyle = '#0a0e27';
+        ctx.font = `bold ${fontSize}px JetBrains Mono`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(index, pos.x, pos.y);
@@ -557,10 +565,18 @@ function drawRoute(progress = 1) {
 
         ctx.save();
         ctx.fillStyle = '#ffcc00';
-        ctx.font = `${10 / zoom}px JetBrains Mono`;
+
+        // Make distance labels scale with zoom (smaller when zoomed out)
+        // Use a base size multiplied by zoom, clamped to reasonable range
+        const baseDistFont = 10; // px at zoom=1
+        const distFontSize = Math.max(6, Math.min(20, Math.round(baseDistFont * zoom)));
+        ctx.font = `${distFontSize}px JetBrains Mono`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(dist, midX, midY - (8 / zoom));
+
+        // Vertical offset should follow same scale so label stays near the line
+        const yOffset = Math.round(8 * zoom);
+        ctx.fillText(dist, midX, midY - yOffset);
         ctx.restore();
 
     }

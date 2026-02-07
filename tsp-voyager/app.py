@@ -35,85 +35,61 @@ def nearest_neighbor_tsp(cities):
     return route, total_distance
 
 def held_karp_tsp(cities):
-    """Solve TSP using Held-Karp dynamic programming (exact solution for small instances)."""
+    # Number of cities
     n = len(cities)
-    if n == 0:
-        return [], 0
-    if n == 1:
-        return [0], 0
-    
-    # For larger instances, fall back to nearest neighbor
-    if n > 12:
-        return nearest_neighbor_tsp(cities)
-    
-    # Distance matrix
-    dist = [[calculate_distance(cities[i], cities[j]) for j in range(n)] for i in range(n)]
-    
-    # DP table: dp[mask][i] = (min_cost, parent)
-    # mask represents visited cities, i is current city
+
+    # Precompute distance between every pair of cities
+    dist = [[math.hypot(cities[i]['x'] - cities[j]['x'],
+                        cities[i]['y'] - cities[j]['y'])
+             for j in range(n)] for i in range(n)]
+
+    # DP table:
+    # dp[(mask, i)] = (min_cost, previous_city)
     dp = {}
-    
-    # Base case: start from city 0
+
+    # Base case:
+    # Path starts at city 0 and goes directly to city i
     for i in range(1, n):
         dp[(1 << i, i)] = (dist[0][i], 0)
-    
-    # Fill DP table
+
+    # Build solutions for subsets of increasing size
     for size in range(2, n):
-        for subset in combinations_of_size(n, size):
-            if 0 in subset:
-                continue
-            mask = 0
-            for city in subset:
-                mask |= (1 << city)
-            
+        # Generate all subsets of cities (excluding city 0)
+        for subset in combinations(range(1, n), size):
+            # Convert subset to bitmask
+            mask = sum(1 << i for i in subset)
+
+            # Try ending the path at each city i in the subset
             for i in subset:
-                prev_mask = mask & ~(1 << i)
-                candidates = []
-                
-                for j in subset:
-                    if j != i and (prev_mask, j) in dp:
-                        cost = dp[(prev_mask, j)][0] + dist[j][i]
-                        candidates.append((cost, j))
-                
-                if candidates:
-                    dp[(mask, i)] = min(candidates)
-    
-    # Find minimum cost to return to start
-    full_mask = (1 << n) - 2  # All cities except 0
-    candidates = []
-    
-    for i in range(1, n):
-        if (full_mask, i) in dp:
-            cost = dp[(full_mask, i)][0] + dist[i][0]
-            candidates.append((cost, i))
-    
-    if not candidates:
-        return nearest_neighbor_tsp(cities)
-    
-    min_cost, last = min(candidates)
-    
-    # Reconstruct path
+                prev_mask = mask ^ (1 << i)
+
+                # Choose the best previous city j
+                dp[(mask, i)] = min(
+                    (dp[(prev_mask, j)][0] + dist[j][i], j)
+                    for j in subset if j != i
+                )
+
+    # Mask representing all cities visited except city 0
+    full_mask = (1 << n) - 2
+
+    # Find minimum cost to return back to city 0
+    min_cost, last_city = min(
+        (dp[(full_mask, i)][0] + dist[i][0], i)
+        for i in range(1, n)
+    )
+
+    # Reconstruct the optimal path
     route = [0]
-    mask = full_mask
-    current = last
-    
+    mask, current = full_mask, last_city
+
     while mask:
         route.append(current)
-        if (mask, current) not in dp:
-            break
-        prev = dp[(mask, current)][1]
-        mask &= ~(1 << current)
-        current = prev
-    
-    route.reverse()
-    route = [0] + route
-    
-    return route, min_cost
+        _, prev_city = dp[(mask, current)]
+        mask ^= (1 << current)
+        current = prev_city
 
-def combinations_of_size(n, size):
-    """Generate all combinations of cities of given size."""
-    from itertools import combinations
-    return list(combinations(range(1, n), size))
+    # Return path starting and ending at city 0
+    return route[::-1] + [0], min_cost
 
 def brute_force_tsp(cities):
     """Solve TSP using brute force (only for very small instances)."""
